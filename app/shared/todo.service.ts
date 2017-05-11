@@ -1,41 +1,55 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import 'rxjs/add/operator/toPromise'
+import { Injectable } from '@angular/core';
+import { Headers, Http, RequestOptions, XHRBackend } from '@angular/http';
 
-import {Todo} from './todo';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+
+import { Todo } from './todo';
 
 @Injectable()
-export class TodoService{
-    private apiUrl :string='api/todos';
-    todos:Todo[]=[];
+export class TodoService {
+    private apiUrl: string = 'api/todos';
 
-    constructor(private http:Http){}
+    constructor(private http: Http) { }
 
-    getTodos():Promise<Todo[]>{
+    getTodos(): Observable<Todo[]> {
         return this.http.get(this.apiUrl)
-        .toPromise()
-        .then(res => res.json().data)
-        .then(todos => this.todos = todos)
-        .catch(this.handleError);
+            .map(res => res.json().data as Todo[])
+            .catch(this.handleError);
     }
 
-    createTodo(title:string){
-        let todo=new Todo(title);
-        this.todos.push(todo);
+    createTodo(title: string) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers });
+        let todo = new Todo(title);
+
+        return this.http.post(this.apiUrl, todo, options)
+            .map(res => res.json().data)
+            .catch(this.handleError);
+
     }
-    deleteTodo(todo:Todo){
-        console.log('delete');
-        let index=this.todos.indexOf(todo);
-        if(index>-1){
-            this.todos.splice(index,1);
-        }
-    }
-    toggleTodo(todo:Todo){
-        todo.completed=!todo.completed;
+    deleteTodo(todo: Todo) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers });
+        let url = `${this.apiUrl}/${todo.id}`;
+
+        return this.http.delete(url, options)
+            .catch(this.handleError);
     }
 
-    private handleError(error:any){
+    toggleTodo(todo: Todo) {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers });
+        let url = `${this.apiUrl}/${todo.id}`;
+
+        return this.http.put(url, todo, options)
+            .catch(this.handleError);
+    }
+
+    private handleError(error: any) {
         console.error('Произошла ошибка', error);
-        return Promise.reject(error.message || error);
+        return Observable.throw(error.message || error);
     }
 }
