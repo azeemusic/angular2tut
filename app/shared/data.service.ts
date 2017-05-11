@@ -1,5 +1,5 @@
-import { TodoService } from './todo.service';
 import {InMemoryDbService} from 'angular-in-memory-web-api';
+import { TodoService } from './todo.service';
 
 export class InMemoryDataService implements InMemoryDbService{
     createDb(){

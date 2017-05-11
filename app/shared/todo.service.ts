@@ -13,10 +13,10 @@ export class TodoService{
 
     getTodos():Promise<Todo[]>{
         return this.http.get(this.apiUrl)
-                        .toPromise()
-                        .then(res=>res.json().data)
-                        .then(todos => this.todos = todos)
-                        .catch(this.handleError);
+        .toPromise()
+        .then(res => res.json().data)
+        .then(todos => this.todos = todos)
+        .catch(this.handleError);
     }
 
     createTodo(title:string){

@@ -17,8 +17,7 @@ import {TodoService} from './shared/todo.service';
         BrowserModule, 
         FormsModule,
         HttpModule,
-        InMemoryWebApiModule.forRoot(InMemoryDataService)
-        
+        InMemoryWebApiModule.forRoot(InMemoryDataService)        
     ],
     declarations:[
         AppComponent,

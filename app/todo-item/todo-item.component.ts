@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { todos }    from '../shared/data';
+import { InMemoryDataService }    from '../shared/data.service';
 import { Todo }     from '../shared/todo';
 
 @Component({
